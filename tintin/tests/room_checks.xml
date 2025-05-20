@@ -118,4 +118,53 @@ The Road of Hawks
 }
 </output>
 </example>
+
+<example>
+<input>
+&lt;1000/1000hp 1546/1550mv [0.0-14.4] Lvl:70 482xp&gt; n
+The door north is closed.
+
+
+
+&lt;1000/1000hp 1546/1550mv [0.0-14.4] Lvl:70 482xp&gt; You open the door.
+
+
+
+&lt;1000/1000hp 1546/1550mv [0.0-14.4] Lvl:70 482xp&gt; Rebt's Meeting Hall
++-----[100%]+ Rebt's Meeting Hall is more a local tavern than a true meeting
+|           | hall, though several of this district's citizens gather here on
+|           | a regular basis. Ale flows freely from taps, and north is a
+|     o     | small lounge where other locals relax and enjoy a pipe and a
+|     |     | tall tale or two. East lies Rebt's corner of the meeting hall,
+|     X-o   | where he supplies adventurers and common folks alike with
+|     |     | supplies.
+|   o-o     |
+|     |     |
+|     o     |
++-----------+
+
+[Obvious Exits: north east south]
+</input>
+<output>
+{
+  "id": "a47a30f536da33397accb051ceca13d25d68cfe6",
+  "name": "Rebt's Meeting Hall",
+  "shortName": "Rebt's Meeting Hall",
+  "percent": "100%",
+  "minimap": [
+    "           ",
+    "           ",
+    "     o     ",
+    "     |     ",
+    "     X-o   ",
+    "     |     ",
+    "   o-o     ",
+    "     |     ",
+    "     o     "
+  ],
+  "description": "Rebt's Meeting Hall is more a local tavern than a true meeting hall, though several of this district's citizens gather here on a regular basis. Ale flows freely from taps, and north is a small lounge where other locals relax and enjoy a pipe and a tall tale or two. East lies Rebt's corner of the meeting hall, where he supplies adventurers and common folks alike with supplies.",
+  "exits": ["north", "east", "south"]
+}
+</output>
+</example>
 </examples>

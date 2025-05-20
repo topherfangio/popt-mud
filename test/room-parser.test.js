@@ -127,7 +127,7 @@ describe('Room Parser', function() {
         assert.strictEqual(roomInfo.id, expectedOutput.id, 'id should match');
 
         // Log success for each example
-        console.log(`✓ Example ${index} passed: ${roomInfo.name}`);
+        console.log(`      ✓ Example ${index} passed: ${roomInfo.name}`);
       });
     });
   });

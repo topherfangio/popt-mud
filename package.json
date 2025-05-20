@@ -1,9 +1,10 @@
 {
   "name": "popt-mud",
-  "displayName": "Popt MUD Tools",
-  "description": "Tools for MUD gaming in VS Code",
+  "displayName": "PotP MUD Tools",
+  "description": "Tools for gaming on the Prophecies of the Pattern MUD in VS Code",
   "version": "0.0.1",
   "publisher": "popt-mud",
+  "license": "UNLICENSED",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -11,7 +12,7 @@
     "Other"
   ],
   "main": "./extension.js",
-  "icon": "resources/icon.svg",
+  "icon": "resources/icon.png",
   "contributes": {
     "commands": [
       {
@@ -24,7 +25,7 @@
       "activitybar": [
         {
           "id": "mud-explorer",
-          "title": "MUD Explorer",
+          "title": "PotP MUD Explorer",
           "icon": "resources/icon.svg"
         }
       ]

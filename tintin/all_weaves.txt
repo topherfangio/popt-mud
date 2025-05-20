@@ -1,0 +1,48 @@
+# Below is the list of all weaves
+
+advanced shield    5     8    air blast          0     4
+airclub            0     1    barrier            10    15
+bigger             3     12   blinding           0     1
+bond               1     9    burn               0     1
+calm               0     1    crushing blow      1     20
+cure blinding      0     3    cure critical      6     3
+cure disease       0     3    cure light         0     3
+cure poison        0     3    cure serious       0     3
+darken             0     1    defense            0     1
+delve              3     10   drown              0     14
+earthquake         10    15   endurance          32    18
+fire bolt          0     12   fire shield        0     5
+firestorm          0     3    flameblade         0     1
+flay               0     1    flog               0     1
+fork lightning     35    20   fortitude          5     12
+freeze finger      1     20   gateway            0     5
+geyser             0     10   glow               0     1
+greater shield     12    16   heal               10    5
+hellfire           1     50   hold               0     25
+hunters instinct   34    18   ice storm          35    20
+infuse             18    16   innervation        7     12
+invert             0     2    knit flesh         30    3
+large              28    18   lash               0     1
+lightning          0     1    mass heal          20    15
+mind shatter       1     50   mirrormirror       60    50
+panther reflex     36    18   portal             0     2
+purgatory          1     50   quicken            4     12
+refresh            3     12   reign of blood     60    150
+reign of death     120   220  reign of justice   35    125
+reign of power     90    200  reign of terror    20    100
+remove curse       0     2    repair flesh       15    9
+reserved           0     99   see hidden         0     1
+see invis          0     1    see light          0     1
+see shadow         0     1    seeing             0     2
+sever              10    1    shatter            0     1
+shield             0     2    shielding          6     4
+sicken             0     8    sixth sense        6     12
+smell poison       0     1    speed              30    18
+spinning the wheel 90    225  spirit fist        0     10
+spirit hammer      0     12   spirit shatter     0     15
+thunder blast      0     13   thunder lance      0     21
+thunder strike     0     17   tower of defense   20    25
+tower of justice   90    150  tower of mind      35    50
+tower of power     120   225  tower of war       60    75
+vigor              0     1    weaken             1     25
+weavesight         2     10 

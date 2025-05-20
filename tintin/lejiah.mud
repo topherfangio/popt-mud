@@ -1,6 +1,35 @@
-#showme {Command: play}
+#nop The first line needs to start with a # so tt++ doesn't try to change
+#nop the command character!
 
-#alias {play} {#session A potp-mud.com 6400}
+/*
+ * Welcome to PotP MUD and TinTin++ (tt++) scripting!
+ *
+ * There is so much you can do in this file! Hopefully the commands below
+ * will give you a good starting point and push you in the right direction.
+ *
+ * See https://tintin.mudhalla.net/manual/ for more info!
+ *
+ * COMMANDS
+ *
+ * Below are some frequently used tt++ scripting commands.
+ *
+ * #action     - Trigger a script in response to text you see
+ * #alias      - Define a shortcut for a command or multiple commands
+ * #echo       - Print out to terminal
+ * #highlight  - Highlight some text in a specific color
+ * #math       - Perform some calculations
+ * #nop        - No Operation: do nothing, can use for comments
+ * #showme     - Print out AND fire #acions / #highlights / etc
+ * #substitute - Replace some text with something else
+ * #var        - Define a variable to use in #math
+ */
+
+/*
+ * Start your journey off right by giving the user some instructions!
+ */
+#echo {Begin your adventure...play}; #echo {}
+
+#alias {play} {reset; #session A potp-mud.com 6400}
 #alias {play2} {#session B potp-mud.com 6400}
 #alias {reset} {#kill all; #read lejiah.mud; fullp;}
 #alias {ls} {l}
@@ -41,23 +70,19 @@
 #alias {getsboxes %0} {get all.strong %0; get all.chest %0; get all.coff %0; get all.trunk %0; get all.strong %0; get all.safe %0; get all.coin %0}
 #alias {free} {flee;recall;sleep tent;save}
 #alias {crecall} {creca; sleep sofa}
-#alias {k %0} {sneak; ambush %0; air %0}
+#alias {k %0} {sneak; ambush %0; shatter %0}
 
-/*
-#action {Reconnecting.} {varoff;wake;grasp; windon}
-#action {Remember to read Help Policy to see if anything has changed.} {varoff;wake;grasp; windon}
-*/
+#action {Reconnecting.} {varoff; wake; grasp; windon}
+#action {Remember to read Help Policy to see if anything has changed.} {varoff; wake; grasp; windon}
 
-#action {%0 !!! DISARMS !!! you %1} {get sword; wear sword}
+#action {%0 !!! DISARMS !!! you %1} {get sword; wear sword; get dagger; dual dagger;}
 
 #action {Your pulse speeds up, but nothing happens.} {berserk}
 
-/*
-#action {a %0 is DEAD!} {but cor}
-#action {an %0 is DEAD!} {but cor}
-#action {A %0 is DEAD!} {but cor}
-#action {An %0 is DEAD!} {but cor}
-*/
+#action {a %0 is DEAD!} {butcher corpse}
+#action {an %0 is DEAD!} {butcher corse}
+#action {A %0 is DEAD!} {butcher corse}
+#action {An %0 is DEAD!} {butcher corse}
 
 #action {You return to the keyboard.} {replay}
 #action {You have messages waiting.} {replay}
@@ -194,21 +219,31 @@
 #substitute {Your %0 %1 %2! [%3]} {<119>Your %0 %1 %2! <029>[<119>%3<029>]<099>}
 #substitute {You say oocly, '%0'} {You say oocly, '<079>%0'}
 
-#action {They aren't here} {scan}
+#var {wlvl} {22}
+#var {gatelvl} {18}
 
-#var {wlvl} {16}
-#var {gatelvl} {12}
+#alias {smallup}
+{
+  grasp;
+  weave $wlvl 'defense' lejiah;
+  weave $wlvl 'fire shield' lejiah;
+  weave $wlvl 'shield' lejiah;
+  weave $wlvl 'vigor' lejiah;
+  weave $wlvl 'quicken' lejiah;
+  weave $wlvl 'sixth sense' lejiah;
+  weave $wlvl 'seeing';
+}
 
 #alias {weaveup}
 {
-  weave $wlvl 'defense' lejhia;
-  weave $wlvl 'fire shield' lejhia;
-  weave $wlvl 'shield' lejhia;
-  weave $wlvl 'vigor' lejhia;
-  weave $wlvl 'advanced shield' lejhia;
-  weave $wlvl 'bigger' lejhia;
-  weave $wlvl 'fortitude' lejhia;
-  weave $wlvl 'quicken' lejhia
+  weave $wlvl 'defense' lejiah;
+  weave $wlvl 'fire shield' lejiah;
+  weave $wlvl 'shield' lejiah;
+  weave $wlvl 'vigor' lejiah;
+  weave $wlvl 'advanced shield' lejiah;
+  weave $wlvl 'bigger' lejiah;
+  weave $wlvl 'fortitude' lejiah;
+  weave $wlvl 'quicken' lejiah
 }
 #alias {wup %0}
 {
@@ -221,13 +256,16 @@
   weave $wlvl 'fortitude' %0;
   weave $wlvl 'quicken' %0
 }
+
+#alias {cureme} {weave $wlvl 'cure light' lejiah}
+#alias {healme} {weave $wlvl 'cure serious' lejiah}
+
 #alias {air %0} {weave $wlvl 'airclub' %0}
 #alias {blind %0} {weave $wlvl 'blind' %0}
 #alias {burn %0} {weave $wlvl 'burn' %0}
-#alias {cure} {weave $wlvl 'cure serious' lejhia}
-#alias {defense} {weave $wlvl 'lejhia' %0}
+#alias {defense} {weave $wlvl 'lejiah' %0}
 #alias {defense %0} {weave $wlvl 'defense' %0}
-#alias {fire %0} {weave $wlvl 'firestorm' %0}
+#alias {fire %0} {weave $wlvl 'fire bolt' %0}
 #alias {fireshield %0} {weave $wlvl 'fire shield' %0}
 #alias {flog %0} {weave $wlvl 'flog' %0}
 #alias {gate %0} {weave $gatelvl 'gate' %0}
@@ -241,30 +279,39 @@
 #alias {thunder %0} {weave $wlvl 'thunder lance' %0}
 #alias {see %0} {weave $wlvl 'see light' %0; weave $wlvl 'see shadow' %0; weave $wlvl 'see hidden' %0; weave $wlvl 'see invis' %0}
 #alias {shatter %0} {weave $wlvl 'shatter' %0}
-#alias {vigor} {weave $wlvl 'vigor' lejhia}
+#alias {vigor} {weave $wlvl 'vigor' lejiah}
 #alias {vigor %0} {weave $wlvl 'vigor' %0}
 
 #nop ---- Close Places (from recall) ----
 #alias {bank} {up; go caemlyn; east; go bank;}
 #alias {back} {go plaza; west;}
 
-#nop ---- From Caemlyn ----
+#alias {rejog} {recall; reset; u; go cae;}
+
+#nop ---- GOOD Jogs (from Caemlyn) ----
 #alias {aringill} {jog 9e^open east^jog 5e s 9e n 3e n 4e}
-#alias {baeb} {jog 6e 5s e 6s od d^go waygate^jog 3e n d 5n d e 3n e u 5n w 2n d n d 3n 3e d e u e u e^go waygat^jog e l 3s 2e s l 2s e j e l 3e 2l 3e h 3n 2j 2n h 2n 2w 2n on n}
 #alias {baerlon} {jog 5w s 2w n 3w ^open west^ jog 29w k 2w h 37w n 3w 3n w 2n w 2n 3w 4n 4w 14n}
-#alias {banditcamp} {jog 6e 5s e 6s od d^go waygate^jog 3e n d 5n d e 3n e u 5n w 2n d n d 4n u n e 2n d n w 3n e 2n 3e^go waygate^jog n j e j n j 2e 2j e s w 3s w s 2w n w h}
-#alias {blight} {jog 6e 5s e 6s od d^go waygate^jog 3e n d 5n d e 3n e u 5n w 2n d n d 4n u n e 2n d n w 3n e 2n 3e^go waygate^jog n j e j n j 2e 2j 4e n e n 4e 11n j oe 2e n 3e n 6e^go gap^jog 2w 2n w}
-#alias {border} {jog 6e 5s e 6s od d^go waygate^jog 3e n d 5n d e 3n e u 5n w 2n d n d 4n u n e 2n d n w 3n e 2n 3e^go waygate^jog n j e j n j 2e 2j 4e n e n 4w s u 8n 3e d s 5w 3n on n 2j 2n 3h 2n}
 #alias {breens} {jog 5w s 2w n 3w ow 10w}
+#alias {cairhien} {jog 9e oe 5e s 9e n 3e n 17e 4n e 3n e 6n e 2n e n e 18n on n}
+#alias {caralain} {jog 5w s 2w n 3w ow 21w 3n w 2n e n w n e 2n}
+#alias {crays} {jog 5w s 2w n 3w ow 17w 5s}
+
+#nop ---- TESTING / CLOSE Jogs (from Caemlyn) [kinda works, just needs some fiddling] ----
+
+#alias {deven} {jog 5w s 2w n 3w ow 17w k 2w h 37w n 3w 3n w 2n w 2n 3w 4n 4w 11s l 3e 11s e s e s e 15s e s e 2s e s e 4s e s e 4s 2e}
+
+#nop ---- BAD Jogs (from Caemlyn) ----
+#alias {banditcamp} {jog 6e 5s e 6s od d^go waygate^jog 3e n d 5n d e 3n e u 5n w 2n d n d 4n u n e 2n d n w 3n e 2n 3e^go waygate^jog n j e j n j 2e 2j e s w 3s w s 2w n w h}
+#alias {baeb} {jog 6e 5s e 6s od d^go waygate^jog 3e n d 5n d e 3n e u 5n w 2n d n d 3n 3e d e u e u e^go waygat^jog e l 3s 2e s l 2s e j e l 3e 2l 3e h 3n 2j 2n h 2n 2w 2n on n}
 #alias {brhc} {jog 8n 2e 3n^open north^jog 8n j 2n j n h 3w}
+
+#nop ---- UNTESTED Jogs (From Caemlyn) ----
+#alias {blight} {jog 7e 5s e 6s od d^go waygate^jog 3e n d 5n d e 3n e u 5n w 2n d n d 4n u n e 2n d n w 3n e 2n 3e^go waygate^jog n j e j n j 2e 2j 4e n e n 4e 11n j oe 2e n 3e n 6e^go gap^jog 2w 2n w}
+#alias {border} {jog 6e 5s e 6s od d^go waygate^jog 3e n d 5n d e 3n e u 5n w 2n d n d 4n u n e 2n d n w 3n e 2n 3e^go waygate^jog n j e j n j 2e 2j 4e n e n 4w s u 8n 3e d s 5w 3n on n 2j 2n 3h 2n}
 #alias {bandareben} {jog 6e5se6sodd^go way^jog 3e nd5nde3n eu5n w2ndnd3n 3edeueue^go way^jog el3s2e sl2sejel3e 2l3eh3n 2j2nh2n2w2nonn}
 #alias {caerin} {jog 6e 5s e 6s od d^go waygate^jog 3e n d 5n d e 3n e u 5n w 2n d n d 3n 3e d e u e u e^go waygate^jog l 3s 2e s l2s e j e l 3e 2l 3e h 3n 2j 2n h 2n 2e}
 #alias {canl} {jog 8n 2e 3n on 8n j 2n j n h j n e h 5n j 2n 3j 2n j h n j 2n j n h j n 2j 5n e 9n 5e 5n 5e 10n e 7n w 3n w 3n e n e 4n 4h n 2h 3n h n 2h w h w h 2w 6h n 2h n 2h n 3h 2n 3h 2w 6h 10w h n 2w n h}
-#alias {cairhien} {jog 9e oe 5e s 9e n 3e n 17e 4n e 3n e 6n e 2n e n e 18n on n}
-#alias {caralain} {jog 5w s 2w n 3w ow 9w 3n w 2n e n w n e 2n}
-#alias {crays} {jog 5w s 2w n 3w ow 5w 5s}
 #alias {darein} {jog 8n 2e 3n on 8n j 2n j n h j n e h 5n j 2n 3j 2n j h n j 2n j n h j n 2j 5n e 9n 5e 5n 5e 10n e 3n 2j e 2j 3e}
-#alias {deven} {jog 5w s 2w n 3w ow 17w k 2w h 37w n 3w 3n w 2n w 2n 3w 4n 4w 11s l 3e 11s e s e s e 15s e s e 2s e s e 4s e s e 4s 2e}
 #alias {dumais} {jog 8n 2e 3n on 8n j 2n j n h j n e h 5n j 2n 3j 2n j h n j 2n j n h j n 2j 5n e 9n 5e 5n 5e 10n 8e s 2e 2s e s e 3s e 2s}
 #alias {ebou} {jog 6e 5s e 6s od d^go waygate^jog 3e n d 2n 5w s w u 3s d w s w s d w u w s w^go waygate^jog s e n 2e 2n 3e oe e}
 #alias {elmora} {jog 6e 5s e 6s od d^go waygate^jog 3e n d 2n 5w s w u 3s d w s w s d w u w s w^go waygate^jog s e n 2e 2n 3e oe e 6n 6e n on 3n e 9n h 2n h 3n 2h n j 2h 6n h j n 2h j n 2h 3w 2h 3w k 3w 2h 5w 5h 3j 2e oe e}
@@ -298,3 +345,49 @@
 #alias {shadowcoast} {jog 6e 5s e 6s od d^go waygate^jog 3e n d 2n 5w s w u 3s d w s w s d w u w s w^go waygate^jog s e n 2e 2n 3e oe e 6n 6e n on 3n e 9n h 2n h 3k w k s 2k w k 2w k 3w k 5w 2k w k w 2k 2w 3k 3w k 2w k w k w k 2w 3k w 2k 2w k w k}
 #alias {towerofwar} {jog 8n 2e 3n on 8n j 2n j n h j n e h 5n j 2n 3j 2n j h n j 2n j n h j n 2j 5n e 9n 5e 5n 5e 10n 8e s e c u w}
 #alias {whitecloak} {jog 6e 5s e 6s od d^go waygate^jog 3e n d 2n 5w s w u 3s d w s w s d w u w s w^go waygate^jog s e n 2e 2n 3e oe e 6n 6e n on 3n e 9n h 2n h e}
+
+
+/*
+#PATHDIR n n
+#PATHDIR s s
+#PATHDIR e e
+#PATHDIR w w
+#PATHDIR u u
+#PATHDIR d d
+#PATHDIR ne j
+#PATHDIR nw h
+#PATHDIR se l
+#PATHDIR sw k
+
+#ALIAS togglemap {
+  #IF %mapflag(vtmap) {
+    #map flag vtmap off;
+    #unsplit;
+    #show *** Map view disabled.;
+  } {
+    #split 16 1;
+    #map flag vtmap on;
+    #show *** Map view enabled.;
+  }
+}
+
+#ALIAS mapinit {
+  #map create 50000
+  #split 30 1
+  #map flag vtmap on
+  #map goto 1
+  #show *** New map created and started at room 1 with vertical split (map on right).
+}
+
+#ALIAS mapsave {
+  #map write potp.map;
+  #show *** Map saved to potp.map;
+}
+
+#ALIAS mapload {
+  #map read myworld.map
+  #map goto 1
+  #show *** Map loaded and started at room 1.
+}
+
+*/

@@ -1,0 +1,42 @@
+{
+  "name": "popt-mud",
+  "displayName": "Popt MUD Tools",
+  "description": "Tools for MUD gaming in VS Code",
+  "version": "0.0.1",
+  "publisher": "popt-mud",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./extension.js",
+  "icon": "resources/icon.svg",
+  "contributes": {
+    "commands": [{
+      "command": "popt-mud.showMudView",
+      "title": "Show MUD View",
+      "icon": "$(terminal)"
+    }],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "mud-explorer",
+          "title": "MUD Explorer",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "mud-explorer": [
+        {
+          "type": "webview",
+          "id": "mudView",
+          "name": "MUD View",
+          "contextualTitle": "MUD View",
+          "icon": "$(terminal)"
+        }
+      ]
+    }
+  }
+}

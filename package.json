@@ -13,11 +13,13 @@
   "main": "./extension.js",
   "icon": "resources/icon.svg",
   "contributes": {
-    "commands": [{
-      "command": "popt-mud.showMudView",
-      "title": "Show MUD View",
-      "icon": "$(terminal)"
-    }],
+    "commands": [
+      {
+        "command": "popt-mud.showMudView",
+        "title": "Show MUD View",
+        "icon": "$(terminal)"
+      }
+    ],
     "viewsContainers": {
       "activitybar": [
         {

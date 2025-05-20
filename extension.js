@@ -1,5 +1,4 @@
 const vscode = require('vscode');
-
 class MudViewProvider {
   constructor(context) {
     this._disposables = [];
@@ -9,78 +8,80 @@ class MudViewProvider {
     this._pendingLastCommand = '';
     this._terminal = null;
     this._roomName = '';
+
     this._mappingEnabled = false;  // Start with mapping disabled
     this._lastRoomDescription = ''; // Store the full room description to detect actual moves
-    
+
     // Map tracking variables
     this._map = {
-      rooms: {},      // Stores all rooms with coordinates as keys
-      currentPosition: "0,0,0",  // x,y,z coordinates (origin point)
-      currentLevel: 0,     // Current Z level for visualization
-      history: []          // Movement history
+      rooms: {},
+      // Stores all rooms with coordinates as keys
+      currentPosition: '0,0,0',  // x,y,z coordinates (origin point)
+      currentLevel: 0,
+      // Current Z level for visualization
+      history: []
+      // Movement history
     };
-    
+
     // Direction to coordinate delta mapping
     this._directionDeltas = {
-      "north": [0, -1, 0],
-      "n": [0, -1, 0],
-      "east": [1, 0, 0],
-      "e": [1, 0, 0],
-      "south": [0, 1, 0],
-      "s": [0, 1, 0],
-      "west": [-1, 0, 0],
-      "w": [-1, 0, 0],
-      "up": [0, 0, 1],
-      "u": [0, 0, 1],
-      "down": [0, 0, -1],
-      "d": [0, 0, -1],
-      "northeast": [1, -1, 0],
-      "ne": [1, -1, 0],
-      "northwest": [-1, -1, 0],
-      "nw": [-1, -1, 0],
-      "southeast": [1, 1, 0],
-      "se": [1, 1, 0],
-      "southwest": [-1, 1, 0],
-      "sw": [-1, 1, 0]
+      'north': [0, -1, 0],
+      'n': [0, -1, 0],
+      'east': [1, 0, 0],
+      'e': [1, 0, 0],
+      'south': [0, 1, 0],
+      's': [0, 1, 0],
+      'west': [-1, 0, 0],
+      'w': [-1, 0, 0],
+      'up': [0, 0, 1],
+      'u': [0, 0, 1],
+      'down': [0, 0, -1],
+      'd': [0, 0, -1],
+      'northeast': [1, -1, 0],
+      'ne': [1, -1, 0],
+      'northwest': [-1, -1, 0],
+      'nw': [-1, -1, 0],
+      'southeast': [1, 1, 0],
+      'se': [1, 1, 0],
+      'southwest': [-1, 1, 0],
+      'sw': [-1, 1, 0]
     };
   }
 
   resolveWebviewView(webviewView) {
     this._view = webviewView;
-
     webviewView.webview.options = {
       enableScripts: true,
       retainContextWhenHidden: true
     };
-
     webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
     // Handle messages from the webview
     webviewView.webview.onDidReceiveMessage(message => {
       switch (message.command) {
-        case 'alert':
-          vscode.window.showInformationMessage(message.text);
-          return;
-        case 'sendCommand':
-          this._sendCommandToTerminal(message.text);
-          return;
-        case 'mapControl':
-          switch (message.action) {
-            case 'reset':
-              this._resetMap();
-              this._updateWebview();
-              break;
-            case 'toggleMapping':
-              this._mappingEnabled = !this._mappingEnabled;
-              console.log(`Mapping ${this._mappingEnabled ? 'enabled' : 'disabled'}`);
-              this._updateWebview();
-              break;
-            case 'zoomIn':
-            case 'zoomOut':
-              // These are handled client-side
-              break;
-          }
-          return;
+      case 'alert':
+        vscode.window.showInformationMessage(message.text);
+        return;
+      case 'sendCommand':
+        this._sendCommandToTerminal(message.text);
+        return;
+      case 'mapControl':
+        switch (message.action) {
+        case 'reset':
+          this._resetMap();
+          this._updateWebview();
+          break;
+        case 'toggleMapping':
+          this._mappingEnabled = !this._mappingEnabled;
+          console.log(`Mapping ${this._mappingEnabled ? 'enabled' : 'disabled'}`);
+          this._updateWebview();
+          break;
+        case 'zoomIn':
+        case 'zoomOut':
+          // These are handled client-side
+          break;
+        }
+        return;
       }
     });
 
@@ -95,15 +96,12 @@ class MudViewProvider {
   _sendCommandToTerminal(text) {
     if (this._terminal) {
       this._terminal.sendText(text + '\n');
-
       // Also update our last command
       this._lastCommand = text;
       this._updateWebview();
-
       console.log('Sent command to terminal:', text);
     } else {
       console.log('No terminal available to send command');
-
       // Fallback method if terminal reference is not available
       vscode.window.terminals.forEach(terminal => {
         if (terminal.name.includes('MUD') || terminal.name === 'Terminal') {
@@ -119,19 +117,20 @@ class MudViewProvider {
 
   _watchTerminal() {
     vscode.window.onDidStartTerminalShellExecution(async executionStartEvent => {
-      console.log("Terminal execution started");
+      console.log('Terminal execution started');
       const execution = executionStartEvent.execution;
       const stream = execution.read();
 
       // Save terminal reference
       if (executionStartEvent.terminal) {
         this._terminal = executionStartEvent.terminal;
-        console.log("Terminal reference saved");
+        console.log('Terminal reference saved');
       }
 
       try {
         // Let's examine what we get
         const reader = await stream;
+
         console.log('Reader type:', typeof reader, reader);
 
         // Try reading as a standard async iterator
@@ -167,7 +166,6 @@ class MudViewProvider {
         this._lastCommand = this._pendingLastCommand;
         this._pendingLastCommand = '';
         this._updateWebview();
-
         console.log('Command entered:', this._lastCommand);
       } else {
         // Add the character to pending command
@@ -180,7 +178,6 @@ class MudViewProvider {
         this._lastCommand = this._pendingLastCommand;
         this._pendingLastCommand = '';
         this._updateWebview();
-
         console.log('Command entered (multi-char):', this._lastCommand);
       }
     }
@@ -193,7 +190,6 @@ class MudViewProvider {
   }
 
   // Process MUD output functions
-
   /**
    * Extract the room name from MUD output data
    * @param {string} data - The raw data received from the terminal
@@ -204,47 +200,55 @@ class MudViewProvider {
 
     // First strip ANSI color codes
     const strippedData = data.replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, '');
-    
+
     // Only process if we have both a mini-map and Obvious Exits
     if (strippedData.includes('Obvious Exits') && strippedData.includes('+-')) {
       // Find the mini-map marker start
       const mapStartIndex = strippedData.indexOf('+-');
+
       if (mapStartIndex > 0) {
         // Find the Obvious Exits line, which marks the end of room description
         const exitsLineIndex = strippedData.indexOf('Obvious Exits');
+
         if (exitsLineIndex > mapStartIndex) {
           // Get the line right before the mini-map starts - that's the room name
           const textBeforeMap = strippedData.substring(0, mapStartIndex).trim();
+
           const lines = textBeforeMap.split('\n');
-          
+
           // Get the last non-empty line before the map starts that isn't a prompt
           let roomName = null;
+
           for (let i = lines.length - 1; i >= 0; i--) {
             const line = lines[i].trim();
+
             if (line && !line.startsWith('<') && !line.includes('move')) {
               roomName = line;
               break;
             }
           }
-          
+
           if (roomName) {
             // Now extract and store the essential room description (room name, map, exits)
             // Find the end of the Obvious Exits line (ends with a closing bracket)
             const exitsLineEnd = strippedData.indexOf(']', exitsLineIndex);
+
             if (exitsLineEnd > 0) {
               // Store from room name to end of Obvious Exits
               // First include the room name explicitly, then the map and exits
               const essentialDesc = roomName + '\n' + strippedData.substring(mapStartIndex, exitsLineEnd + 1);
+
               this._lastRoomDescription = essentialDesc.trim();
-              
+
               console.log('Extracted room name:', roomName);
+
               return roomName;
             }
           }
         }
       }
     }
-    
+
     return null;
   }
 
@@ -256,6 +260,7 @@ class MudViewProvider {
 
     // Extract room name
     const roomName = this._extractRoomName(data);
+
     if (roomName) {
       // Update map with room information
       this._updateMapWithRoom(roomName);
@@ -263,55 +268,87 @@ class MudViewProvider {
 
     // Check for exits in the output
     const exitMatch = strippedData.match(/Obvious Exits:([\s?\(\w\)]+)/i);
+
     if (exitMatch) {
       this._exitCount++;
+
       const exitsText = exitMatch[1].trim();
 
       // Process exit directions, handling parentheses
       const exitParts = exitsText.split(/\s+/);
+
       this._exits = exitParts.map(part => {
         // Remove parentheses if present
         return part.replace(/[\(\)]/g, '');
       });
 
       console.log('Detected exits:', this._exits);
-      
+
       // Update map with exits
       if (this._roomName) {
         this._updateMapWithExits(this._exits);
       }
-      
+
       this._updateWebview();
+
       return true; // Indicates that exits were found
     }
+
     return false; // No exits found
   }
-  
+
   /**
-   * Update the map with new room information
-   * @param {string} roomName - The name of the current room
+   * Generate a short name for room display by removing common articles
+   * @param {string} roomName - The full room name
+   * @returns {string} - A shortened room name suitable for display
    */
+  _generateShortName(roomName) {
+    if (!roomName) return '?';
+
+    // Remove any text after a dash (common in area names)
+    let shortName = roomName.split(' - ')[0];
+
+    // Split into words
+    const words = shortName.split(' ');
+
+    // Remove common articles from the beginning
+    if (['A', 'An', 'The'].includes(words[0])) {
+      words.shift();
+    }
+
+    // If we have words left, use the first meaningful word
+    if (words.length > 0) {
+      return words[0];
+    }
+
+    // Fallback to the first letter of the original room name
+    return roomName.charAt(0);
+  }
+
   _updateMapWithRoom(roomName) {
     if (!roomName) return;
-    
+
     // Always store the current room name, regardless of mapping state
     this._roomName = roomName;
-    
+
     // If mapping is disabled, don't update the map
     if (!this._mappingEnabled) {
       return;
     }
-    
+
     // Check if the last command was a movement direction
     const direction = this._lastCommand.toLowerCase().trim();
+
     if (this._directionDeltas[direction]) {
       // Calculate new position based on movement direction
       const [currentX, currentY, currentZ] = this._map.currentPosition.split(',').map(Number);
+
       const [dx, dy, dz] = this._directionDeltas[direction];
-      
+
       const newPosition = `${currentX + dx},${currentY + dy},${currentZ + dz}`;
+
       console.log(`Moving from ${this._map.currentPosition} to ${newPosition} (${direction})`);
-      
+
       // Add to movement history
       this._map.history.push({
         from: this._map.currentPosition,
@@ -320,15 +357,19 @@ class MudViewProvider {
         roomName: roomName,
         timestamp: Date.now()
       });
-      
+
       // Update current position
       this._map.currentPosition = newPosition;
     }
-    
+
     // Create or update the room at the current position
     if (!this._map.rooms[this._map.currentPosition]) {
+      // Calculate a shortened name for display
+      const shortName = this._generateShortName(roomName);
+
       this._map.rooms[this._map.currentPosition] = {
         name: roomName,
+        shortName: shortName,
         firstVisit: Date.now(),
         visits: 1,
         exits: {},
@@ -337,62 +378,70 @@ class MudViewProvider {
     } else {
       // Update existing room
       this._map.rooms[this._map.currentPosition].visits++;
+
       this._map.rooms[this._map.currentPosition].lastVisit = Date.now();
-      
+
       // Always update the room name if it was previously unknown
       if (this._map.rooms[this._map.currentPosition].name === '?') {
         this._map.rooms[this._map.currentPosition].name = roomName;
+        this._map.rooms[this._map.currentPosition].shortName = this._generateShortName(roomName);
       }
+
       // Keep the existing exits
     }
-    
+
     console.log(`Updated map with room: ${roomName} at ${this._map.currentPosition}`);
   }
-  
+
   /**
    * Update the exits for the current room
    * @param {string[]} exits - Array of available exit directions
    */
   _updateMapWithExits(exits) {
     if (!exits || !exits.length || !this._mappingEnabled) return;
-    
+
     // Get the current room
     const currentRoom = this._map.rooms[this._map.currentPosition];
+
     if (!currentRoom) return;
-    
+
     // Update exits
     exits.forEach(exit => {
       const normalizedExit = exit.toLowerCase();
+
       if (this._directionDeltas[normalizedExit]) {
         // Calculate where this exit would lead
         const [currentX, currentY, currentZ] = this._map.currentPosition.split(',').map(Number);
+
         const [dx, dy, dz] = this._directionDeltas[normalizedExit];
+
         const targetPosition = `${currentX + dx},${currentY + dy},${currentZ + dz}`;
-        
+
         // Add this exit to the room's exits
         currentRoom.exits[normalizedExit] = targetPosition;
-        
+
         // If we haven't created the target room yet, create a placeholder
         if (!this._map.rooms[targetPosition]) {
           this._map.rooms[targetPosition] = {
-            name: `?`,
+            name: '?',
             visits: 0,  // Use visits for tracking if room has been visited
             exits: {},
             coordinates: [currentX + dx, currentY + dy, currentZ + dz]
           };
-          
+
           // Add reverse exit if it makes sense
           const reverseDirection = this._getReverseDirection(normalizedExit);
+
           if (reverseDirection) {
             this._map.rooms[targetPosition].exits[reverseDirection] = this._map.currentPosition;
           }
         }
       }
     });
-    
+
     console.log('Updated exits for room:', currentRoom.name, currentRoom.exits);
   }
-  
+
   /**
    * Get the reverse direction for a given direction
    * @param {string} direction - The direction to reverse
@@ -411,20 +460,21 @@ class MudViewProvider {
       'northwest': 'southeast', 'nw': 'se',
       'southeast': 'northwest', 'se': 'nw'
     };
-    
+
     return reverseMap[direction];
   }
-  
+
   /**
    * Reset the map data
    */
   _resetMap() {
     this._map = {
       rooms: {},
-      currentPosition: "0,0,0",
+      currentPosition: '0,0,0',
       currentLevel: 0,
       history: []
     };
+
     console.log('Map has been reset');
   }
 
@@ -435,84 +485,87 @@ class MudViewProvider {
   _generateMapHtml() {
     // If no rooms yet, show placeholder
     if (Object.keys(this._map.rooms).length === 0) {
-      return `<div class="map-placeholder">Explore the MUD to build your map!</div>`;
+      return '<div class="map-placeholder">Explore the MUD to build your map!</div>';
     }
-    
+
     // Find map boundaries
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+
     for (const roomKey in this._map.rooms) {
       const [x, y] = roomKey.split(',').map(Number);
+
       minX = Math.min(minX, x);
       maxX = Math.max(maxX, x);
       minY = Math.min(minY, y);
       maxY = Math.max(maxY, y);
     }
-    
+
     // Add some padding
     minX -= 2;
     maxX += 2;
     minY -= 2;
     maxY += 2;
-    
+
     // Calculate grid dimensions
     const gridWidth = maxX - minX + 1;
     const gridHeight = maxY - minY + 1;
-    
+
     // Create the grid
-    let html = `<div class="map-grid" style="grid-template-columns: repeat(${gridWidth}, 30px); grid-template-rows: repeat(${gridHeight}, 30px);">
-`;
-    
+    let html = `<div class="map-grid" style="grid-template-columns: repeat(${gridWidth}, 30px); grid-template-rows: repeat(${gridHeight}, 30px);">`;
+
     // Fill the grid with cells
     for (let y = minY; y <= maxY; y++) {
       for (let x = minX; x <= maxX; x++) {
         const pos = `${x},${y},0`; // Assuming Z=0 for now
+
         const room = this._map.rooms[pos];
+
         const isCurrentRoom = pos === this._map.currentPosition;
-        
+
         // Cell content based on whether room exists
         if (room) {
           const roomClass = isCurrentRoom ? 'room current-room' : (room.visits > 0 ? 'room' : 'room unknown-room');
-          const roomInitial = room.name.charAt(0).toUpperCase();
+
+          // Use the shortName's first letter, or fallback to the first letter of the full name
+          const roomInitial = (room.shortName ? room.shortName.charAt(0) : room.name.charAt(0)).toUpperCase();
+
           const roomTitle = room.name.replace(/'/g, '&apos;');
-          
-          html += `<div class="map-cell" title="${roomTitle}">
-`;
-          
+
+          html += `<div class="map-cell" title="${roomTitle}">`;
+
           // Add paths to neighboring rooms
           if (room.exits) {
             for (const [direction, targetPos] of Object.entries(room.exits)) {
               const shortDir = direction.charAt(0); // First letter of direction
+
               if (['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw'].includes(shortDir)) {
-                html += `<div class="path-${shortDir}"></div>
-`;
+                html += `<div class="path-${shortDir}"></div>`;
               }
             }
           }
-          
-          html += `<div class="${roomClass}">${roomInitial}</div>
-`;
-          html += `</div>
-`;
+
+          html += `<div class="${roomClass}">${roomInitial}</div>`;
+          html += `</div>`;
         } else {
-          html += `<div class="map-cell"></div>
-`;
+          html += `<div class="map-cell"></div>`;
         }
       }
     }
-    
-    html += `</div>`;
+
+    html += '</div>';
+
     return html;
   }
 
   _getHtmlForWebview(webview) {
     // Generate map HTML
     const mapHtml = this._generateMapHtml();
-    
+
     // Create JSON representation for debugging
     const mapJson = JSON.stringify(this._map, null, 2);
-    
+
     return `<!DOCTYPE html>
-      <html>
+    <html>
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -606,8 +659,9 @@ class MudViewProvider {
             z-index: 2;
           }
           .current-room {
-            background-color: var(--vscode-focusBorder);
+            background-color: #5cb85c; /* Green color for better visibility */
             color: white;
+            border: 2px solid white;
           }
           .unknown-room {
             background-color: var(--vscode-disabledForeground);
@@ -627,7 +681,6 @@ class MudViewProvider {
           }
           .path-n { top: 0; }
           .path-s { bottom: 0; }
-          
           .path-e, .path-w {
             height: 3px;
             width: calc(var(--cell-size) * 0.5);
@@ -679,16 +732,14 @@ class MudViewProvider {
       <body>
         <div class="container">
           <h1>MUD Assistant</h1>
-          
           ${this._exits.length > 0 ? `
-            <div class="exits-container">
-              <h3>Available Exits:</h3>
-              <div class="exits">
-                ${this._exits.map(exit => `<span class="exit-tag" onclick="sendCommand('${exit}')">${exit}</span>`).join('')}
-              </div>
+          <div class="exits-container">
+            <h3>Available Exits:</h3>
+            <div class="exits">
+              ${this._exits.map(exit => `<span class="exit-tag" onclick="sendCommand('${exit}')">${exit}</span>`).join('')}
             </div>
+          </div>
           ` : ''}
-          
           <!-- Map section -->
           <div class="map-container">
             <h2>Map</h2>
@@ -702,31 +753,25 @@ class MudViewProvider {
               ${mapHtml}
             </div>
           </div>
-          
           <p>Connect to your MUD in the terminal below.</p>
-          
           <!-- Debug Section with visual separator -->
           <div class="debug-section">
             <h2>Debugging Information</h2>
-            
             <!-- Last Command (always visible) -->
             <div class="command-container">
               <h3>Last Command:</h3>
               <div class="command">${this._lastCommand || 'No command yet'}</div>
             </div>
-            
             <!-- Current Room Name -->
             <div class="room-name-container">
               <h3>Current Room Name:</h3>
               <div class="command">${this._roomName || 'Unknown room'}</div>
             </div>
-            
             <!-- Last Room Description -->
             <div class="room-desc-container">
               <h3>Last Room Description:</h3>
               <textarea class="room-desc-text" readonly>${this._lastRoomDescription || 'No room description yet'}</textarea>
             </div>
-            
             <!-- Map Data -->
             <div class="map-debug">
               <h3>Map Data:</h3>
@@ -737,7 +782,7 @@ class MudViewProvider {
         <script>
           // Handle messages from the extension
           const vscode = acquireVsCodeApi();
-
+          
           // Function to send a command to the terminal
           function sendCommand(command) {
             vscode.postMessage({
@@ -782,7 +827,7 @@ class MudViewProvider {
           }
         </script>
       </body>
-      </html>`;
+    </html>`;
   }
 
   dispose() {
@@ -793,6 +838,7 @@ class MudViewProvider {
         console.error('Error disposing:', e);
       }
     });
+
     this._disposables = [];
   }
 }
@@ -800,6 +846,7 @@ class MudViewProvider {
 function activate(context) {
   // Register the webview view provider
   const mudViewProvider = new MudViewProvider(context);
+
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider('mudView', mudViewProvider)
   );
@@ -810,12 +857,9 @@ function activate(context) {
     await vscode.commands.executeCommand('workbench.view.extension.mud-explorer');
     vscode.window.showInformationMessage('MUD View activated!');
   });
-
   context.subscriptions.push(disposable);
 }
-
-function deactivate() {}
-
+function deactivate() { }
 module.exports = {
   activate,
   deactivate

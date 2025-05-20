@@ -18,11 +18,11 @@ The Caemlyn Road
 </input>
 <output>
 {
-  id: "aa44c5f36254afadf1146abefe94b5eb6c1613fa",
-  name: "The Caemlyn Road",
-  shortName: "Caemlyn Road",
-  percent: "63%",
-  minimap: [
+  "id": "aa44c5f36254afadf1146abefe94b5eb6c1613fa",
+  "name": "The Caemlyn Road",
+  "shortName": "Caemlyn Road",
+  "percent": "63%",
+  "minimap": [
     "     o     ",
     "     |     ",
     "     o o   ",
@@ -31,10 +31,90 @@ The Caemlyn Road
     "           ",
     "           ",
     "           ",
-    "           ",
+    "           "
   ],
-  description: "The Caemlyn Road runs along across and around the gently sloping hills that make up the landscape of the city and surrounding countryside. All about are buildings with red and purple tiled roofs, most being homes and shops standing sometimes as much as three and four stories tall.",
-  exits: ["north", "east", "west"]
+  "description": "The Caemlyn Road runs along across and around the gently sloping hills that make up the landscape of the city and surrounding countryside. All about are buildings with red and purple tiled roofs, most being homes and shops standing sometimes as much as three and four stories tall.",
+  "exits": ["north", "east", "west"]
+}
+</output>
+</example>
+
+<example>
+<input>
+The Chaemlyn Road
++-----[ 63%]+ The Chaemlyn Road runs along across and around the gently
+|     o     | sloping hills that make up the landscape of the city and
+|     |     | surrounding countryside. All about are buildings with red and
+|     o o   | purple tiled roofs, most being homes and shops standing
+|     | |   | sometimes as much as three and four stories tall.
+| o-o-X-o-o |
+|           |
+|           |
+|           |
+|           |
++-----------+
+
+[Obvious Exits: north east west]
+</input>
+<output>
+{
+  "id": "15f9d8c856962da0c145255e023a980b383bf175",
+  "name": "The Chaemlyn Road",
+  "shortName": "Chaemlyn Road",
+  "percent": "63%",
+  "minimap": [
+    "     o     ",
+    "     |     ",
+    "     o o   ",
+    "     | |   ",
+    " o-o-X-o-o ",
+    "           ",
+    "           ",
+    "           ",
+    "           "
+  ],
+  "description": "The Chaemlyn Road runs along across and around the gently sloping hills that make up the landscape of the city and surrounding countryside. All about are buildings with red and purple tiled roofs, most being homes and shops standing sometimes as much as three and four stories tall.",
+  "exits": ["north", "east", "west"]
+}
+</output>
+</example>
+
+<example>
+<input>
+The Road of Hawks
++-----[ 42%]+ Homes climbing up to four and five stories tall rise above
+|     o     | other, tile-roofed homes of a smaller stature. A low stone wall
+|     |     | leads alongside the road, with children running along the tops,
+|     o-o   | arms spread wide for balance.
+|     |     |
+|     X-o   |
+|     |     |
+|     o     |
+|     |     |
+|     o     |
++-----------+
+
+[Obvious Exits: north (west) south]
+</input>
+<output>
+{
+  "id": "5e2a26df4c6ce71a094bec9836ec8672f025130c",
+  "name": "The Road of Hawks",
+  "shortName": "Road of Hawks",
+  "percent": "42%",
+  "minimap": [
+    "     o     ",
+    "     |     ",
+    "     o-o   ",
+    "     |     ",
+    "     X-o   ",
+    "     |     ",
+    "     o     ",
+    "     |     ",
+    "     o     "
+  ],
+  "description": "Homes climbing up to four and five stories tall rise above other, tile-roofed homes of a smaller stature. A low stone wall leads alongside the road, with children running along the tops, arms spread wide for balance.",
+  "exits": ["north", "(west)", "south"]
 }
 </output>
 </example>

@@ -1,0 +1,41 @@
+<examples>
+<example>
+<input>
+The Caemlyn Road
++-----[ 63%]+ The Caemlyn Road runs along across and around the gently
+|     o     | sloping hills that make up the landscape of the city and
+|     |     | surrounding countryside. All about are buildings with red and
+|     o o   | purple tiled roofs, most being homes and shops standing
+|     | |   | sometimes as much as three and four stories tall.
+| o-o-X-o-o |
+|           |
+|           |
+|           |
+|           |
++-----------+
+
+[Obvious Exits: north east west]
+</input>
+<output>
+{
+  id: "aa44c5f36254afadf1146abefe94b5eb6c1613fa",
+  name: "The Caemlyn Road",
+  shortName: "Caemlyn Road",
+  percent: "63%",
+  minimap: [
+    "     o     ",
+    "     |     ",
+    "     o o   ",
+    "     | |   ",
+    " o-o-X-o-o ",
+    "           ",
+    "           ",
+    "           ",
+    "           ",
+  ],
+  description: "The Caemlyn Road runs along across and around the gently sloping hills that make up the landscape of the city and surrounding countryside. All about are buildings with red and purple tiled roofs, most being homes and shops standing sometimes as much as three and four stories tall.",
+  exits: ["north", "east", "west"]
+}
+</output>
+</example>
+</examples>

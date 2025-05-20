@@ -1,4 +1,6 @@
 const vscode = require('vscode');
+const hash = require('object-hash');
+
 class MudViewProvider {
   constructor(context) {
     this._disposables = [];
@@ -22,6 +24,30 @@ class MudViewProvider {
       history: []
       // Movement history
     };
+
+    this.testData = {
+      id: "aa44c5f36254afadf1146abefe94b5eb6c1613fa",
+      name: "The Caemlyn Road",
+      shortName: "Caemlyn Road",
+      percent: "63%",
+      minimap: [
+        "     o     ",
+        "     |     ",
+        "     o o   ",
+        "     | |   ",
+        " o-o-X-o-o ",
+        "           ",
+        "           ",
+        "           ",
+        "           ",
+      ],
+      description: "The Caemlyn Road runs along across and around the gently sloping hills that make up the landscape of the city and surrounding countryside. All about are buildings with red and purple tiled roofs, most being homes and shops standing sometimes as much as three and four stories tall.",
+      exits: ["north", "east", "west"]
+    }
+
+    this.testHash = hash({ name: this.testData['name'], minimap: this.testData['minimap'], description: this.testData['description'], exits: this.testData['exits'] });
+
+    console.log(" *** testHash: ", this.testHash);
 
     // Direction to coordinate delta mapping
     this._directionDeltas = {
@@ -782,7 +808,7 @@ class MudViewProvider {
         <script>
           // Handle messages from the extension
           const vscode = acquireVsCodeApi();
-          
+
           // Function to send a command to the terminal
           function sendCommand(command) {
             vscode.postMessage({
@@ -790,7 +816,7 @@ class MudViewProvider {
               text: command
             });
           }
-          
+
           // Map control functions
           function toggleMapping() {
             vscode.postMessage({
@@ -798,14 +824,14 @@ class MudViewProvider {
               action: 'toggleMapping'
             });
           }
-          
+
           function resetMap() {
             vscode.postMessage({
               command: 'mapControl',
               action: 'reset'
             });
           }
-          
+
           function zoomIn() {
             const mapArea = document.getElementById('map-area');
             const mapGrid = mapArea.querySelector('.map-grid');
@@ -814,7 +840,7 @@ class MudViewProvider {
               document.documentElement.style.setProperty('--cell-size', (currentSize + 5) + 'px');
             }
           }
-          
+
           function zoomOut() {
             const mapArea = document.getElementById('map-area');
             const mapGrid = mapArea.querySelector('.map-grid');

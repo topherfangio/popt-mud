@@ -25,30 +25,6 @@ class MudViewProvider {
       // Movement history
     };
 
-    this.testData = {
-      id: "aa44c5f36254afadf1146abefe94b5eb6c1613fa",
-      name: "The Caemlyn Road",
-      shortName: "Caemlyn Road",
-      percent: "63%",
-      minimap: [
-        "     o     ",
-        "     |     ",
-        "     o o   ",
-        "     | |   ",
-        " o-o-X-o-o ",
-        "           ",
-        "           ",
-        "           ",
-        "           ",
-      ],
-      description: "The Caemlyn Road runs along across and around the gently sloping hills that make up the landscape of the city and surrounding countryside. All about are buildings with red and purple tiled roofs, most being homes and shops standing sometimes as much as three and four stories tall.",
-      exits: ["north", "east", "west"]
-    }
-
-    this.testHash = hash({ name: this.testData['name'], minimap: this.testData['minimap'], description: this.testData['description'], exits: this.testData['exits'] });
-
-    console.log(" *** testHash: ", this.testHash);
-
     // Direction to coordinate delta mapping
     this._directionDeltas = {
       'north': [0, -1, 0],

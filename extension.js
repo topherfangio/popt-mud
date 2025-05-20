@@ -26,6 +26,9 @@ class MudViewProvider {
         case 'alert':
           vscode.window.showInformationMessage(message.text);
           return;
+        case 'sendCommand':
+          this._sendCommandToTerminal(message.text);
+          return;
       }
     });
 
@@ -33,11 +36,42 @@ class MudViewProvider {
     this._watchTerminal();
   }
 
+  /**
+   * Send a command to the terminal
+   * @param {string} text - The text command to send
+   */
+  _sendCommandToTerminal(text) {
+    if (this._terminal) {
+      this._terminal.sendText(text + '\n');
+
+      // Also update our last command
+      this._lastCommand = text;
+      this._updateWebview();
+
+      console.log('Sent command to terminal:', text);
+    } else {
+      console.log('No terminal available to send command');
+
+      // Fallback method if terminal reference is not available
+      vscode.window.terminals.forEach(terminal => {
+        if (terminal.name.includes('MUD') || terminal.name === 'Terminal') {
+          terminal.sendText(text + '\n');
+          this._terminal = terminal;
+          this._lastCommand = text;
+          this._updateWebview();
+          console.log('Found and used terminal:', terminal.name);
+        }
+      });
+    }
+  }
+
   _watchTerminal() {
     vscode.window.onDidStartTerminalShellExecution(async executionStartEvent => {
       console.log("Terminal execution started");
       const execution = executionStartEvent.execution;
       const stream = execution.read();
+
+      this._terminal = executionStartEvent.terminal;
 
       try {
         // Let's examine what we get
@@ -166,6 +200,11 @@ class MudViewProvider {
             padding: 2px 8px;
             border-radius: 4px;
             font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+          }
+          .exit-tag:hover {
+            background-color: var(--vscode-button-hoverBackground);
           }
           .command-container {
             margin: 15px 0;
@@ -197,7 +236,7 @@ class MudViewProvider {
             <div class="exits-container">
               <h3>Available Exits:</h3>
               <div class="exits">
-                ${this._exits.map(exit => `<span class="exit-tag">${exit}</span>`).join('')}
+                ${this._exits.map(exit => `<span class="exit-tag" onclick="sendCommand('${exit}')">${exit}</span>`).join('')}
               </div>
             </div>
           ` : ''}
@@ -207,11 +246,13 @@ class MudViewProvider {
           // Handle messages from the extension
           const vscode = acquireVsCodeApi();
 
-          // Example of sending a message to the extension
-          // vscode.postMessage({
-          //   command: 'alert',
-          //   text: 'Hello from the webview!'
-          // });
+          // Function to send a command to the terminal
+          function sendCommand(command) {
+            vscode.postMessage({
+              command: 'sendCommand',
+              text: command
+            });
+          }
         </script>
       </body>
       </html>`;

@@ -140,12 +140,23 @@ class MudViewProvider {
   _processMudOutput(data) {
     if (!data) return;
 
+    // First strip ANSI color codes
+    const strippedData = data.replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, '');
+
     // Check for exits in the output
-    const exitMatch = data.match(/Obvious Exits: ([\w ]+)/i);
+    const exitMatch = strippedData.match(/Obvious Exits:([\s?\(\w\)]+)/i);
     if (exitMatch) {
       this._exitCount++;
       const exitsText = exitMatch[1].trim();
-      this._exits = exitsText.split(' ');
+
+      // Process exit directions, handling parentheses
+      const exitParts = exitsText.split(/\s+/);
+      this._exits = exitParts.map(part => {
+        // Remove parentheses if present
+        return part.replace(/[\(\)]/g, '');
+      });
+
+      console.log('Detected exits:', this._exits);
       this._updateWebview();
       return true; // Indicates that exits were found
     }

@@ -75,7 +75,7 @@
 #action {Reconnecting.} {varoff; wake; grasp; windon}
 #action {Remember to read Help Policy to see if anything has changed.} {varoff; wake; grasp; windon}
 
-#action {%0 !!! DISARMS !!! you %1} {get sword; wear sword; get dagger; dual dagger;}
+#action {%0 !!! DISARMS !!! you %1} {get rapier; wear rapier; get dagger; dual dagger;}
 
 #action {Your pulse speeds up, but nothing happens.} {berserk}
 
@@ -257,8 +257,10 @@
   weave $wlvl 'quicken' %0
 }
 
-#alias {cureme} {weave $wlvl 'cure light' lejiah}
-#alias {healme} {weave $wlvl 'cure serious' lejiah}
+#alias {lightheal} {weave $wlvl 'cure light' lejiah}
+#alias {medheal} {weave $wlvl 'cure serious' lejiah}
+#alias {bigheal} {weave $wlvl 'cure critical' lejiah}
+#alias {healme} {weave $wlvl 'cure critical' lejiah}
 
 #alias {air %0} {weave $wlvl 'airclub' %0}
 #alias {blind %0} {weave $wlvl 'blind' %0}
@@ -289,11 +291,23 @@
 #alias {rejog} {recall; reset; u; go cae;}
 
 #nop ---- GOOD Jogs (from Caemlyn) ----
+
+#nop Lvl 50ish mobs? 70 was way too high
 #alias {aringill} {jog 9e^open east^jog 5e s 9e n 3e n 4e}
+
+#nop Lvl 70-80ish mobs -- NOTE: You start out recalling just east of Baerlon and can just walk west 3 spaces!
 #alias {baerlon} {jog 5w s 2w n 3w ^open west^ jog 29w k 2w h 37w n 3w 3n w 2n w 2n 3w 4n 4w 14n}
+
+#nop TODO
 #alias {breens} {jog 5w s 2w n 3w ow 10w}
+
+#nop TODO
 #alias {cairhien} {jog 9e oe 5e s 9e n 3e n 17e 4n e 3n e 6n e 2n e n e 18n on n}
+
+#nop TODO
 #alias {caralain} {jog 5w s 2w n 3w ow 21w 3n w 2n e n w n e 2n}
+
+#nop TODO
 #alias {crays} {jog 5w s 2w n 3w ow 17w 5s}
 
 #nop ---- TESTING / CLOSE Jogs (from Caemlyn) [kinda works, just needs some fiddling] ----
